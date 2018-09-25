@@ -108,7 +108,7 @@ namespace Mmqi
       if (!IsHandleValid) throw new InvalidOperationException("Not connected.");
       int compCode, reason;
       Bindings.MQDISC(out _handle, out compCode, out reason);
-      _handle = -1;
+      _handle = MQC.MQHC_UNUSABLE_HCONN;
     }
 
     public void Commit()

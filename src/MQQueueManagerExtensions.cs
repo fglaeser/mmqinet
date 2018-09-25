@@ -6,6 +6,10 @@ namespace Mmqi
 {
   public static class MQQueueManagerExtensions
   {
+    public static IMQQueue AccessQueue(this IMQQueueManager @this, string queueName, int openOptions)
+    {
+      return new MQQueue(@this, queueName, openOptions);
+    }
     public static void PutInQueue(this IMQQueueManager @this, string queueName, MQMessage message)
     {
       @this.PutInQueue(queueName, message, new MQPutMessageOptions());

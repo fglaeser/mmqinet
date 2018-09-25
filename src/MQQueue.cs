@@ -86,15 +86,15 @@ namespace Mmqi
       {
         Bindings.MQCLOSE(_qMgr.Handle, ref _handle, options, out compCode, out reason);
         if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
-        _handle = -1;
+        _handle = MQC.MQHO_UNUSABLE_HOBJ;
         _queueName = null;
-        _openOptions = 0;
+        _openOptions = MQC.MQCO_NONE;
       }
     }
 
     private void RealOpen()
     {
-      if (string.IsNullOrEmpty(_queueName)) throw new ArgumentNullException("queueName");
+      if (string.IsNullOrEmpty(_queueName)) throw new InvalidOperationException("queueName");
       int hobj, compCode, reason;
       var od = new MQObjectDescriptor();
       od.ObjectType = MQC.MQOT_Q;
@@ -103,6 +103,14 @@ namespace Mmqi
       Bindings.MQOPEN(_qMgr.Handle, ref structMQOD, _openOptions, out hobj, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
       _handle = hobj;
+    }
+
+    public void Dispose()
+    {
+      if (IsOpen)
+      {
+        Close();
+      }
     }
 
   }

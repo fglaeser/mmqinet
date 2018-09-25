@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mmqi
 {
-  public interface IMQQueue
+  public interface IMQQueue : IDisposable
   {
     void Open(string queueName, int openOptions);
     void Put(MQMessage message);
