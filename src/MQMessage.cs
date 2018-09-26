@@ -589,7 +589,7 @@ namespace Mmqi
       }
     }
 
-    public new MQMessageDescriptor MQMD
+    public MQMessageDescriptor MQMD
     {
       get
       {

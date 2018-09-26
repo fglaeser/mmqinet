@@ -10,6 +10,6 @@ namespace Mmqi
     void Put(MQMessage message);
     void Put(MQMessage message, MQPutMessageOptions pmo);
     void Get(MQMessage message, MQGetMessageOptions gmo);
-    void Close(int options = MQC.MQCO_NONE);
+    void Close();
   }
 }

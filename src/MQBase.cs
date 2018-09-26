@@ -36,9 +36,9 @@ namespace Mmqi
     }
 
     protected void GetBytes(string value, ref byte[] buffer)
-      {
-        Encoding.ASCII.GetBytes(value.PadRight(buffer.Length, '\0'), 0, buffer.Length, buffer, 0);
-      }
+    {
+      Encoding.ASCII.GetBytes(value.PadRight(buffer.Length, '\0'), 0, buffer.Length, buffer, 0);
+    }
 
     protected void GetBytesRightPad(string value, ref byte[] buffer)
     {

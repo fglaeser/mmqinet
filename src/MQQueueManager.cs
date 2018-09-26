@@ -8,10 +8,10 @@ namespace Mmqi
 {
   public class MQQueueManager : IMQQueueManager
   {
-    private string _queueMgrName;
-    private int _handle = -1;
-
-    public int Handle { get { return _handle; } }
+    internal int objectHandle;
+    public int Handle { get { return objectHandle; } }
+    public int ObjectType { protected set; get; }
+    public string ObjectName { protected set; get; }
 
     public bool IsConnected
     {
@@ -25,7 +25,7 @@ namespace Mmqi
     {
       get
       {
-        return _handle != 0 && -1 != _handle;
+        return objectHandle != MQC.MQHO_NONE && MQC.MQHO_UNUSABLE_HOBJ != objectHandle;
       }
     }
 
@@ -57,11 +57,13 @@ namespace Mmqi
     public void Connect(string queueMgrName)
     {
       int hconn, compCode, reason;
+      ObjectName = queueMgrName;
+      ObjectType = MQC.MQOT_Q_MGR;
       Bindings.MQCONN(queueMgrName, out hconn, out compCode, out reason);
+
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
 
-      _handle = hconn;
-      _queueMgrName = queueMgrName;
+      objectHandle = hconn;
     }
 
     public void ConnectTcpClient(string queueMgrName, int options, string channel, string connectionInfo, string user, string password)
@@ -109,13 +111,14 @@ namespace Mmqi
         Marshal.StructureToPtr(cd.StructMQCD, intPtrCd, false);
         cno.ClientConnPtr = intPtrCd;
 
+        ObjectName = queueMgrName;
+        ObjectType = MQC.MQOT_Q_MGR;
+
         MQCNO structMQCNO = cno.StructMQCNO;
         Bindings.MQCONNX(queueMgrName, ref structMQCNO, out hconn, out compCode, out reason);
 
         if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
-
-        _handle = hconn;
-        _queueMgrName = queueMgrName;
+        objectHandle = hconn;
       }
       finally
       {
@@ -130,21 +133,24 @@ namespace Mmqi
     {
       if (!IsHandleValid) throw new InvalidOperationException("Not connected.");
       int compCode, reason;
-      Bindings.MQDISC(out _handle, out compCode, out reason);
-      _handle = MQC.MQHC_UNUSABLE_HCONN;
+      Bindings.MQDISC(out objectHandle, out compCode, out reason);
+
+      if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
+
+      objectHandle = MQC.MQHC_UNUSABLE_HCONN;
     }
 
     public void Commit()
     {
       int compCode, reason;
-      Bindings.MQCMIT(_handle, out compCode, out reason);
+      Bindings.MQCMIT(objectHandle, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
     public void Backout()
     {
       int compCode, reason;
-      Bindings.MQBACK(_handle, out compCode, out reason);
+      Bindings.MQBACK(objectHandle, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
@@ -158,7 +164,7 @@ namespace Mmqi
       var structMQOD = od.StructMQOD;
       var structMQMD = message.md.StructMQMD;
       var structMQPMO = pmo.StructMQPMO;
-      Bindings.MQPUT1(_handle, ref structMQOD, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
+      Bindings.MQPUT1(objectHandle, ref structMQOD, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
@@ -170,4 +176,5 @@ namespace Mmqi
       }
     }
   }
+
 }

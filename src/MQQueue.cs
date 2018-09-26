@@ -5,41 +5,24 @@ using System.Text;
 
 namespace Mmqi
 {
-  public class MQQueue : IMQQueue
+  public class MQQueue : MQObject, IMQQueue
   {
-    protected static int defaultMaxMsgSize = 4096;
-
-    private IMQQueueManager _qMgr;
-    private string _queueName;
-    private int _openOptions;
-    private int _handle = -1;
-
-    public int Handle { get { return _handle; } }
-
-    public bool IsOpen
-    {
-      get
-      {
-        return _handle != 0 && -1 != _handle;
-      }
-    }
-
     public MQQueue(IMQQueueManager queueMgr, string queueName, int openOptions) : this(queueMgr)
     {
-      _queueName = queueName;
-      _openOptions = openOptions;
+      ObjectName = queueName;
+      OpenOptions = openOptions;
       RealOpen();
     }
 
     public MQQueue(IMQQueueManager queueMgr)
     {
-      _qMgr = queueMgr;
+      qMgr = queueMgr;
     }
 
     public void Open(string queueName, int openOptions)
     {
-      _queueName = queueName;
-      _openOptions = openOptions;
+      ObjectName = queueName;
+      OpenOptions = openOptions;
       RealOpen();
     }
 
@@ -52,7 +35,7 @@ namespace Mmqi
       byte[] buffer = message.GetBuffer();
       var structMQMD = message.md.StructMQMD;
       var structMQPMO = pmo.StructMQPMO;
-      Bindings.MQPUT(_qMgr.Handle, _handle, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
+      Bindings.MQPUT(qMgr.Handle, objectHandle, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
@@ -70,7 +53,7 @@ namespace Mmqi
       var structMQMD = message.md.StructMQMD;
       var structMQGMO = gmo.StructMQGMO;
       var buffer = new byte[defaultMaxMsgSize];
-      Bindings.MQGET(_qMgr.Handle, _handle, ref structMQMD, ref structMQGMO, defaultMaxMsgSize, buffer, out dataLength, out compCode, out reason);
+      Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, defaultMaxMsgSize, buffer, out dataLength, out compCode, out reason);
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
       if(dataLength > 0)
       {
@@ -79,30 +62,12 @@ namespace Mmqi
       }
     }
 
-    public void Close(int options = MQC.MQCO_NONE)
-    {
-      int compCode, reason;
-      if (_qMgr != null && _qMgr.IsConnected && IsOpen)
-      {
-        Bindings.MQCLOSE(_qMgr.Handle, ref _handle, options, out compCode, out reason);
-        if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
-        _handle = MQC.MQHO_UNUSABLE_HOBJ;
-        _queueName = null;
-        _openOptions = MQC.MQCO_NONE;
-      }
-    }
-
     private void RealOpen()
     {
-      if (string.IsNullOrEmpty(_queueName)) throw new InvalidOperationException("queueName");
-      int hobj, compCode, reason;
       var od = new MQObjectDescriptor();
       od.ObjectType = MQC.MQOT_Q;
-      od.ObjectName = _queueName;
-      MQOD structMQOD = od.StructMQOD;
-      Bindings.MQOPEN(_qMgr.Handle, ref structMQOD, _openOptions, out hobj, out compCode, out reason);
-      if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
-      _handle = hobj;
+      od.ObjectName = ObjectName;
+      base.Open(od);
     }
 
     public void Dispose()
