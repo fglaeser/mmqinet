@@ -9,7 +9,8 @@ namespace IntegrationTest
     {
       Console.WriteLine("Hello World!");
       using (var mqmgr = MQQueueManager.Connect("GA02.AR.T.QM", MQC.MQCO_NONE, "ITG.TO.GA02.TEST", "192.6.6.39(1416)"))
-      using (var q = mqmgr.AccessQueue("QL.ITG.ALERTRAN.SUBSCRIBER.BOQ", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
+      //using (var q = mqmgr.AccessQueue("QL.ITG.ALERTRAN.SUBSCRIBER.BOQ", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
+      using (var q = mqmgr.AccessTopic("R4/AltaModificacionDeEmpleados", string.Empty, MQC.MQTOPIC_OPEN_AS_PUBLICATION, MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
       {
         var message = new MQMessage();
         MQGetMessageOptions gmo = new MQGetMessageOptions();

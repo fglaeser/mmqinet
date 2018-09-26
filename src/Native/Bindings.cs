@@ -7,9 +7,12 @@ namespace Mmqi.Native
 {
   internal static class Bindings
   {
+#if LINUX
+    const string DLLNAME = "libmqic.so";
+#else
     const string DLLNAME = "mqic.dll";
+#endif
 
-    //TODO: Missing Commit and Backout, Put1
     #region MQ Manager
 
     [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]

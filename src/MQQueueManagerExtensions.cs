@@ -10,6 +10,10 @@ namespace Mmqi
     {
       return new MQQueue(@this, queueName, openOptions);
     }
+    public static MQTopic AccessTopic(this IMQQueueManager @this, string topicName, string topicObject, int openAs, int options)
+    {
+      return new MQTopic(@this, topicName, topicObject, openAs, options);
+    }
     public static void PutInQueue(this IMQQueueManager @this, string queueName, MQMessage message)
     {
       @this.PutInQueue(queueName, message, new MQPutMessageOptions());

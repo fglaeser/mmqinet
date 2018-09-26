@@ -732,5 +732,19 @@ namespace Mmqi
         this.mqOD.UnknownDestCount = this.mqOD32.UnknownDestCount;
         this.mqOD.Version = this.mqOD32.Version;
       }
+
+    internal void CopyCHARVIntoOD()
+    {
+      this.mqOD.ObjectString = this.objectString.mqcharv;
+      this.mqOD.SelectionString = this.selectionString.mqcharv;
+      if (this.mqOD.ObjectString.VSPtr != IntPtr.Zero && this.objectString.VSString != null)
+      {
+        base.ThrowNewMQException(2, 2425);
+      }
+      if (this.mqOD.SelectionString.VSPtr != IntPtr.Zero && this.selectionString.VSString != null)
+      {
+        base.ThrowNewMQException(2, 2425);
+      }
     }
   }
+}
