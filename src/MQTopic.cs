@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mmqi
 {
-  public class MQTopic : MQObject, IDisposable
+  public class MQTopic : MQObject, IMQPubSub
   {
     private readonly string _topicName;
 
@@ -31,7 +31,7 @@ namespace Mmqi
 
     }
 
-    public void Put(MQMessage message, MQPutMessageOptions pmo)
+    public void Publish(MQMessage message, MQPutMessageOptions pmo)
     {
       int compCode, reason;
       if (message == null) throw new MQException(MQC.MQCC_FAILED, MQC.MQRC_MD_ERROR);
@@ -44,10 +44,7 @@ namespace Mmqi
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
-    public void Put(MQMessage message)
-    {
-      Put(message, new MQPutMessageOptions());
-    }
+    public void Subscribe() { throw new NotSupportedException(); }
 
     private void OpenForSubscription()
     {
