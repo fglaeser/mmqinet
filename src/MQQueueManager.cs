@@ -77,30 +77,53 @@ namespace Mmqi
 
     public void ConnectWithOptions(string queueMgrName, int options, MQChannelDefinition cd, string user, string password)
     {
-
       int hconn, compCode, reason;
+      IntPtr intPtrCd = IntPtr.Zero, intPtrUsr = IntPtr.Zero, intPtrPwd = IntPtr.Zero, intPtrCsp = IntPtr.Zero;
+      try
+      {
+        var cno = new MQConnectOptions();
+        cno.Version = MQC.MQCNO_VERSION_5;
+        if (user != null || password != null)
+        {
+          var csp = new MQConnectionSecurityParameters();
+          csp.AuthenticationType = MQC.MQCSP_AUTH_USER_ID_AND_PWD;
+          if (user != null)
+          {
+            intPtrUsr = Marshal.StringToCoTaskMemAnsi(user);
+            csp.CSPUserIdPtr = intPtrUsr;
+            csp.CSPUserIdLength = user.Length;
+          }
+          if (password != null)
+          {
+            intPtrPwd = Marshal.StringToCoTaskMemAnsi(password);
+            csp.CSPPasswordPtr = intPtrPwd;
+            csp.CSPPasswordLength = password.Length;
+          }
+          intPtrCsp = Marshal.AllocCoTaskMem(Marshal.SizeOf(csp.StructMQCSP));
+          Marshal.StructureToPtr(csp.StructMQCSP, intPtrCsp, false);
+          cno.SecurityParmsPtr = intPtrCsp;
+        }
 
-      var cno = new MQConnectOptions();
-      cno.Version = MQC.MQCNO_VERSION_5;
+        cno.Options = options;
+        intPtrCd = Marshal.AllocCoTaskMem(Marshal.SizeOf(cd.StructMQCD));
+        Marshal.StructureToPtr(cd.StructMQCD, intPtrCd, false);
+        cno.ClientConnPtr = intPtrCd;
 
-      var csp = new MQConnectionSecurityParameters();
-      csp.AuthenticationType = MQC.MQCSP_AUTH_USER_ID_AND_PWD;
-      csp.UserId = user;
-      csp.Password = password;
+        MQCNO structMQCNO = cno.StructMQCNO;
+        Bindings.MQCONNX(queueMgrName, ref structMQCNO, out hconn, out compCode, out reason);
 
-      cno.SecurityParms = csp;
-      cno.Options = options;
+        if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
 
-      IntPtr intPtrCd = Marshal.AllocCoTaskMem(Marshal.SizeOf(cd.StructMQCD));
-      Marshal.StructureToPtr(cd.StructMQCD, intPtrCd, false);
-      cno.ClientConnPtr = intPtrCd;
-      MQCNO structMQCNO = cno.StructMQCNO;
-      Bindings.MQCONNX(queueMgrName, ref structMQCNO, out hconn, out compCode, out reason);
-
-      if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
-
-      _handle = hconn;
-      _queueMgrName = queueMgrName;
+        _handle = hconn;
+        _queueMgrName = queueMgrName;
+      }
+      finally
+      {
+        if (intPtrCd != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtrCd);
+        if (intPtrUsr != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtrUsr);
+        if (intPtrPwd != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtrPwd);
+        if (intPtrCsp != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtrCsp);
+      }
     }
 
     public void Disconnect()

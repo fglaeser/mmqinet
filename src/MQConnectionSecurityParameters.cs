@@ -151,7 +151,8 @@ namespace Mmqi
         this.mqCSP.StrucId[0] = 67;
         this.mqCSP.StrucId[1] = 83;
         this.mqCSP.StrucId[2] = 80;
-        this.mqCSP.StrucId[3] = 32;
+        this.mqCSP.StrucId[3] = 169;
+      //this.mqCSP.StrucId[3] = 32;
         this.mqCSP.Version = 1;
         this.mqCSP.AuthenticationType = 0;
         this.mqCSP.Reserved1 = new byte[4];

@@ -1,2 +1,3 @@
 # Minimalist MQI.Net
-.Net Core interface for IBM MQ (WebSphere MQ, MQSeries)
+Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack and Hookers.
+
