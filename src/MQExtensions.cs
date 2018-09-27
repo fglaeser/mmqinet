@@ -39,8 +39,10 @@
       var od = new MQObjectDescriptor
       {
         ObjectType = MQC.MQOT_TOPIC,
-        ObjectName = topicName
+        ObjectName = string.Empty,
+        Version = MQC.MQOD_VERSION_4
       };
+      od.ObjectString.VSString = topicName;
       @this.Put1(od, message, pmo);
     }
     public static void Put(this IMQQueue @this, MQMessage message) => @this.Put(message, new MQPutMessageOptions());

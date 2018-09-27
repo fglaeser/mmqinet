@@ -45,13 +45,11 @@ namespace Mmqi
         {
           Marshal.Copy(array, 0, intPtr, array.Length);
           Bindings.MQOPEN(qMgr.Handle, intPtr, OpenOptions, out hobj, out compCode, out reason);
-          Marshal.FreeCoTaskMem(intPtr);
         }
         finally
         {
           if (intPtr != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtr);
         }
-
       }
 
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
@@ -73,4 +71,5 @@ namespace Mmqi
       }
     }
   }
+
 }

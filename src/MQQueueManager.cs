@@ -159,12 +159,32 @@ namespace Mmqi
       int compCode, reason;
       if (message == null) throw new MQException(MQC.MQCC_FAILED, MQC.MQRC_MD_ERROR);
       if (pmo == null) throw new MQException(MQC.MQCC_FAILED, MQC.MQRC_PMO_ERROR);
+
+      od.CopyCHARVIntoOD();
       pmo.ValidateOptions();
       byte[] buffer = message.GetBuffer();
-      var structMQOD = od.StructMQOD;
       var structMQMD = message.md.StructMQMD;
       var structMQPMO = pmo.StructMQPMO;
-      Bindings.MQPUT1(objectHandle, ref structMQOD, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
+      if (od.Version == MQC.MQOD_VERSION_1 || od.Version == MQC.MQOD_VERSION_2)
+      {
+        var structMQOD = od.StructMQOD;
+        Bindings.MQPUT1(objectHandle, ref structMQOD, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
+      }
+      else
+      {
+        byte[] array = new byte[od.GetRequiredBufferSize()];
+        od.WriteStruct(array, 0);
+        IntPtr intPtr = Marshal.AllocCoTaskMem(array.Length);
+        try
+        {
+          Marshal.Copy(array, 0, intPtr, array.Length);
+          Bindings.MQPUT1(objectHandle, intPtr, ref structMQMD, ref structMQPMO, buffer.Length, buffer, out compCode, out reason);
+        }
+        finally
+        {
+          if (intPtr != IntPtr.Zero) Marshal.FreeCoTaskMem(intPtr);
+        }
+      }
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 

@@ -28,7 +28,6 @@ namespace Mmqi
       {
         OpenForPublication();
       }
-
     }
 
     public void Publish(MQMessage message, MQPutMessageOptions pmo)

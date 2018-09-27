@@ -55,7 +55,6 @@ namespace Mmqi.Native
     [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public static extern void MQGET(int hConn, int hObj, ref MQMD mqmd, ref MQGMO mqgmo, int bufferLength, [Out] byte[] buffer, out int dataLength, out int compCode, out int reason);
 
-
     #endregion
 
   }
