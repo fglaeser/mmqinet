@@ -29,7 +29,6 @@
       @this.Put1(od, message, pmo);
     }
 
-    //TODO: Test
     public static void Publish(this IMQQueueManager @this, string topicName, MQMessage message)
     {
       @this.Publish(topicName, message, new MQPutMessageOptions());

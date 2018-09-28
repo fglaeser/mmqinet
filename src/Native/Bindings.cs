@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Mmqi.Native
 {
   internal static class Bindings
   {
-#if LINUX
-    const string DLLNAME = "libmqic.so";
-#else
-    const string DLLNAME = "mqic.dll";
-#endif
+    const string DLLNAME = "mqic";
 
     #region MQ Manager
 
