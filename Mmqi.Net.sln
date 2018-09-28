@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MmqiNetLite", "src\MmqiNetLite.csproj", "{2BFC8D4A-07B5-4B40-8E98-B03C070CCC48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "test\IntegrationTest\IntegrationTest.csproj", "{44102E07-601C-4C31-A6BA-01B7E47C96E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTest", "test\IntegrationTest\IntegrationTest.csproj", "{44102E07-601C-4C31-A6BA-01B7E47C96E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mmqi", "test\Test.Mmqi\Test.Mmqi.csproj", "{B93D6956-0C47-4E46-A371-893EF5458592}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{44102E07-601C-4C31-A6BA-01B7E47C96E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44102E07-601C-4C31-A6BA-01B7E47C96E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44102E07-601C-4C31-A6BA-01B7E47C96E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93D6956-0C47-4E46-A371-893EF5458592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93D6956-0C47-4E46-A371-893EF5458592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93D6956-0C47-4E46-A371-893EF5458592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93D6956-0C47-4E46-A371-893EF5458592}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
