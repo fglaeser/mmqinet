@@ -53,7 +53,7 @@ using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channe
   qmgr.Publish("Some/Topic", outgoing);
 }
 ```
-### Geting message from queue.
+### Getting message from queue.
 ```csharp
 using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
 using (var q = qmgr.AccessQueue("QL.QUEUE1", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_FAIL_IF_QUIESCING))
