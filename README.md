@@ -1,6 +1,10 @@
 # Minimalist MQI.Net
 Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack and Hookers.
 
+[![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
+
+[![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
+
 ## Examples
 ### Open queue manager and put message in a queue.
 ```csharp
