@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mmqi;
+using System;
 
 namespace Test.Mmqi
 {
@@ -11,14 +12,14 @@ namespace Test.Mmqi
     public string ConnectionInfo => "192.6.6.39(1416)";
     public string QueueName => "QL.ITG.ALERTRAN.SUBSCRIBER.BOQ";
 
-    [TestMethod]
+    [TestMethod, TestCategory("MQQueueManager")]
     public void ConnectToMQServer_Ok()
     {
       var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo);
       broker.Disconnect();
     }
 
-    [TestMethod]
+    [TestMethod, TestCategory("MQQueueManager")]
     public void ConnectToMQServer_ThrowsQMgrNameError()
     {
       try
@@ -32,7 +33,7 @@ namespace Test.Mmqi
       }
     }
 
-    [TestMethod]
+    [TestMethod, TestCategory("MQQueueManager")]
     public void ConnectToMQServer_ThrowsUnknownChannelName()
     {
       try
@@ -46,7 +47,7 @@ namespace Test.Mmqi
       }
     }
 
-    [TestMethod]
+    [TestMethod, TestCategory("MQQueueManager")]
     public void ConnectToMQServer_ThrowsHostNotAvailable()
     {
       try
@@ -60,18 +61,18 @@ namespace Test.Mmqi
       }
     }
 
-
-    [TestMethod]
+    [TestMethod, TestCategory("MQQueueManager")]
     public void Put1InQueue_Ok()
     {
-      using(var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
+      string message = "Put1InQueue";
+      using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
       {
-        var message = new MQMessage()
+        var outgoing = new MQMessage()
         {
           CharacterSet = MQC.CODESET_UTF,
           Encoding = MQC.MQENC_NORMAL
         };
-        message.WriteString("Put1InQueue");
+        outgoing.WriteString(message);
 
 
         var od = new MQObjectDescriptor
@@ -79,15 +80,65 @@ namespace Test.Mmqi
           ObjectType = MQC.MQOT_Q,
           ObjectName = QueueName
         };
-        broker.Put1(od, message, new MQPutMessageOptions());
+        broker.Put1(od, outgoing, new MQPutMessageOptions());
 
         using (var q = broker.AccessQueue(QueueName, MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
         {
-          q.Get()
+          var incoming = new MQMessage();
+          MQGetMessageOptions gmo = new MQGetMessageOptions();
+          gmo.WaitInterval = (int) TimeSpan.FromSeconds(30).TotalMilliseconds; //MQC.MQWI_UNLIMITED;
+          gmo.Options |= MQC.MQGMO_WAIT;
+          gmo.Options |= MQC.MQGMO_SYNCPOINT;
+          q.Get(incoming, gmo);
+          Assert.AreEqual(message, incoming.ReadString(incoming.DataLength));
         }
-
       }
     }
+
+    [TestMethod, TestCategory("MQQueueManager")]
+    public void Backout()
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQQueueManager")]
+    public void Commit()
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQQueue")]
+    public void OpenQueue_Ok()
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQQueue")]
+    public void OpenQueue_ThrowsObjectNameError() 
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQQueue")]
+    public void QueuePut_Ok() { }
+
+    [TestMethod, TestCategory("MQQueue")]
+    public void QueueGet_Ok() { }
+
+    [TestMethod, TestCategory("MQTopic")]
+    public void OpenTopic_Ok()
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQTopic")]
+    public void OpenTopic_ThrowsObjectNameError()
+    {
+
+    }
+
+    [TestMethod, TestCategory("MQTopic")]
+    public void TopicPublish_Ok() { }
 
   }
 }

@@ -47,5 +47,8 @@
     public static void Put(this IMQQueue @this, MQMessage message) => @this.Put(message, new MQPutMessageOptions());
     public static void Publish(this IMQPubSub @this, MQMessage message) => @this.Publish(message, new MQPutMessageOptions());
 
+    public static string ReadAll(this MQMessage @this)
+     => @this.ReadString(@this.DataLength);
+
   }
 }
