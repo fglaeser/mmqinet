@@ -6,7 +6,15 @@ Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack a
 [![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
 
 ## Examples
-### Open queue manager and put message in a queue.
+### Connecting in client mode
+```csharp
+var queueManagerName = "QM01";
+var channel = "SVRCONN.1";
+var connectionInfo = string.Format("{0}({1})", "192.168.99.100", 1414);
+var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo);
+qmgr.Disconnect();
+```
+### How to put the message on a queue (MQPUT1)
 ```csharp
 string message = "Put1InQueue";
 var queueManagerName = "QM01";
@@ -43,21 +51,7 @@ using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channe
   qmgr.Put("QL.QUEUE1", outgoing);
 }
 ```
-### Use the Publish extension method to publish message in a topic.
-```csharp
-using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
-{
-  var outgoing = new MQMessage()
-  {
-    CharacterSet = MQC.CODESET_UTF,
-    Encoding = MQC.MQENC_NORMAL
-  };
-  outgoing.WriteString(message);
-
-  qmgr.Publish("Some/Topic", outgoing);
-}
-```
-### Getting message from queue.
+### How to wait for a single message
 ```csharp
 using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
 using (var q = qmgr.AccessQueue("QL.QUEUE1", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_FAIL_IF_QUIESCING))
@@ -71,3 +65,42 @@ using (var q = qmgr.AccessQueue("QL.QUEUE1", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_
       Console.WriteLine(incoming.ReadString(incoming.DataLength));
 }
 ```
+### How to publish messages on topics (MQPUT1)
+```csharp
+using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
+{
+  var outgoing = new MQMessage()
+  {
+    CharacterSet = MQC.CODESET_UTF,
+    Encoding = MQC.MQENC_NORMAL
+  };
+  outgoing.WriteString(message);
+
+  var od = new MQObjectDescriptor
+  {
+    ObjectType = MQC.MQOT_TOPIC,
+    ObjectName = string.Empty,
+    Version = MQC.MQOD_VERSION_4
+  };
+  od.ObjectString.VSString = topicName;
+  qmgr.Put1(od, outgoing, new MQPutMessageOptions());
+}
+```
+### Alternatively, use the Publish extension method to make the code cleaner.
+```csharp
+using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
+{
+  var outgoing = new MQMessage()
+  {
+    CharacterSet = MQC.CODESET_UTF,
+    Encoding = MQC.MQENC_NORMAL
+  };
+  outgoing.WriteString(message);
+  
+  qmgr.Publish("Some/Topic", outgoing);
+}
+```
+## Installation
+* As a prerequisite, you first need to install an IBM MQ client in the system where Mmqi.Net is about to be installed; it is a free library offered by IBM on top of which higher-level ones, such as Mmqi.Net, can connect to queue managers. IBM MQ clients can be downloaded from IBM's website.
+You can dowload the client from here ... [IBM MQ V8 Clients](https://www-01.ibm.com/support/docview.wss?uid=swg24037500)
+
