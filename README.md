@@ -1,9 +1,9 @@
 # Minimalist MQI.Net
 Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack and Hookers.
 
-[![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqinet.svg)](http://www.nuget.org/packages/Mmqi.Net/)
+[![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)
 
-[![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/Mmqi.Net/)
+[![NuGet Download count](https://img.shields.io/nuget/dt/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)
 
 [![Build Status](https://travis-ci.org/fglaeser/mqinetlite.svg?branch=master)](https://travis-ci.org/fglaeser/mqinetlite)
 
