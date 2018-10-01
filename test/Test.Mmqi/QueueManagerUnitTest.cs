@@ -124,7 +124,7 @@ namespace Test.Mmqi
     }
 
     [TestMethod, TestCategory("MQQueue")]
-    public void OpenQueue_ThrowsObjectNameError() 
+    public void OpenQueue_ThrowsUnknownObjectName() 
     {
       using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
       {
@@ -135,7 +135,7 @@ namespace Test.Mmqi
         }
         catch (MQException e)
         {
-          Assert.AreEqual(MQC.MQRC_OBJECT_NAME_ERROR, e.Reason);
+          Assert.AreEqual(MQC.MQRC_UNKNOWN_OBJECT_NAME, e.Reason);
         }
       }
     }
@@ -177,28 +177,11 @@ namespace Test.Mmqi
     }
 
     [TestMethod, TestCategory("MQTopic")]
-    public void OpenTopic_ThrowsObjectNameError()
-    {
-      using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
-      {
-        try
-        {
-          var topic = new MQTopic(broker, TopicName, string.Empty, MQC.MQTOPIC_OPEN_AS_PUBLICATION, MQC.MQOO_INPUT_AS_Q_DEF);
-          topic.Close();
-        }
-        catch (MQException e)
-        {
-          Assert.AreEqual(MQC.MQRC_OBJECT_NAME_ERROR, e.Reason);
-        }
-      }
-    }
-
-    [TestMethod, TestCategory("MQTopic")]
     public void TopicPublish_Ok()
     {
       var message = "PublishInTopic";
       using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
-      using (var topic = new MQTopic(broker, TopicName, string.Empty, MQC.MQTOPIC_OPEN_AS_PUBLICATION, MQC.MQOO_INPUT_AS_Q_DEF))
+      using (var topic = new MQTopic(broker, TopicName, string.Empty, MQC.MQTOPIC_OPEN_AS_PUBLICATION, MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
       {
         var outgoing = new MQMessage()
         {
@@ -210,7 +193,7 @@ namespace Test.Mmqi
       }
 
       using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
-      using (var q = broker.AccessQueue("R4.QUEUE", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_FAIL_IF_QUIESCING))
+      using (var q = broker.AccessQueue("QL.R4.EMPLEADOSANDREANI.SUBSCRIBER", MQC.MQOO_INPUT_AS_Q_DEF + MQC.MQOO_FAIL_IF_QUIESCING))
       {
         var incoming = new MQMessage();
         MQGetMessageOptions gmo = new MQGetMessageOptions();
