@@ -1,30 +1,11 @@
 # Minimalist MQI.Net
 Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack and Hookers.
 
-[![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
+[![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqinet.svg)](http://www.nuget.org/packages/Mmqi.Net/)
 
-[![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
+[![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/Mmqi.Net/)
 
 [![Build Status](https://travis-ci.org/fglaeser/mqinetlite.svg?branch=master)](https://travis-ci.org/fglaeser/mqinetlite)
-
-## Verbs features matrix
-
-| MQI Verb  | Implemented | Class |
-| ------------- | ------------- |-----------|
-| MQCONN  | :heavy_check_mark:  | MQQueueManager |
-| MQCONNX | :heavy_check_mark:  | MQQueueManager |
-| MQDISC  | :heavy_check_mark:  | MQQueueManager |
-| MQOPEN  | :heavy_check_mark:  | MQQueue, MQTopic |
-| MQCLOSE  | :heavy_check_mark: | MQQueue, MQTopic |
-| MQSUB  | :x: | |
-| MQPUT  | :heavy_check_mark: | MQQueue, MQTopic |
-| MQPUT1  | :heavy_check_mark: | MQQueueManager |
-| MQGET  | :heavy_check_mark: | MQQueue |
-| MQINQ  | :x: | |
-| MQSET  | :x: | |
-| MQCMIT | :heavy_check_mark: | MQQueueManager |
-| MQBACK | :heavy_check_mark: | MQQueueManager |
-| MQCTL  | :x: | |
 
 ## Examples
 ### Connecting in client mode
