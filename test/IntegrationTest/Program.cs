@@ -58,7 +58,6 @@ namespace IntegrationTest
       using (var mqmgr = MQQueueManager.Connect("GA02.AR.T.QM", MQC.MQCO_NONE, "ITG.TO.GA02.TEST", "192.6.6.39(1416)"))
       {
         var message = new MQMessage();
-
         message.CharacterSet = MQC.CODESET_UTF;
         message.Encoding = MQC.MQENC_NORMAL;
         message.WriteString("Message from MQ NetCore PUT1 In Topic WIN");

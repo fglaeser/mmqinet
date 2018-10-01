@@ -39,11 +39,6 @@ namespace Mmqi
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
     }
 
-    public void Put(MQMessage message)
-    {
-      Put(message, new MQPutMessageOptions());
-    }
-
     public void Get(MQMessage message, MQGetMessageOptions gmo)
     {
       int dataLength, compCode, reason;
