@@ -5,6 +5,8 @@ Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack a
 
 [![NuGet Download count](https://img.shields.io/nuget/dt/mmqinet.svg)](http://www.nuget.org/packages/mmqinet/)
 
+[![Build Status](https://travis-ci.org/fglaeser/mqinetlite.svg?branch=master)](https://travis-ci.org/fglaeser/mqinetlite)
+
 ## Examples
 ### Connecting in client mode
 ```csharp
