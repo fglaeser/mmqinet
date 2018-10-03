@@ -3,7 +3,7 @@ Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack a
 
 | NuGet Version  | Downloads | Build Status |
 | ------------- | ------------- |-----------|
-| [![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)|[![NuGet Download count](https://img.shields.io/nuget/dt/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)|[![Build Status](https://travis-ci.org/fglaeser/mqinetlite.svg?branch=master)](https://travis-ci.org/fglaeser/mqinetlite)|
+| [![NuGet Version and Downloads count](https://img.shields.io/nuget/vpre/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)|[![NuGet Download count](https://img.shields.io/nuget/dt/mmqi.net.svg)](http://www.nuget.org/packages/Mmqi.Net/)|[![Build Status](https://travis-ci.org/fglaeser/mmqinet.svg?branch=master)](https://travis-ci.org/fglaeser/mmqinet)|
 ## Verbs features matrix
 
 | MQI Verb  | Implemented | Class |
