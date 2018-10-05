@@ -4,13 +4,14 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>Mmqi.Net</AssemblyName>
     <RootNamespace>Mmqi</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Facundo Glaeser</Authors>
     <Company />
     <RepositoryUrl>https://github.com/fglaeser/mmqinet.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>Minimalist .Net Core interface for IBM MQ (WebSphere MQ, MQSeries)</Description>
     <PackageTags>mqi;ibm;mq</PackageTags>
+    <PackageReleaseNotes>Fix wrong call in the extension method Put.</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
