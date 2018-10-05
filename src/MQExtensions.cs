@@ -17,7 +17,7 @@
 
     public static void Put(this IMQQueueManager @this, string queueName, MQMessage message)
     {
-      @this.Publish(queueName, message, new MQPutMessageOptions());
+      @this.Put(queueName, message, new MQPutMessageOptions());
     }
     public static void Put(this IMQQueueManager @this, string queueName, MQMessage message, MQPutMessageOptions pmo)
     {
