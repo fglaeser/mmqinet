@@ -45,14 +45,21 @@ namespace Mmqi
       if (message == null) throw new MQException(MQC.MQCC_FAILED, MQC.MQRC_MD_ERROR);
       if (gmo == null) throw new MQException(MQC.MQCC_FAILED, MQC.MQRC_GMO_ERROR);
       message.ClearMessage();
+      var maxMsgSize = defaultMaxMsgSize;
       var structMQMD = message.md.StructMQMD;
       var structMQGMO = gmo.StructMQGMO;
-      var buffer = new byte[defaultMaxMsgSize];
-      Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, defaultMaxMsgSize, buffer, out dataLength, out compCode, out reason);
+      var buffer = new byte[maxMsgSize];
+      Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, maxMsgSize, buffer, out dataLength, out compCode, out reason);
+      while(compCode != MQC.MQCC_OK && reason == MQC.MQRC_TRUNCATED_MSG_FAILED)
+      {
+        maxMsgSize = dataLength;
+        buffer = new byte[maxMsgSize];
+        Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, maxMsgSize, buffer, out dataLength, out compCode, out reason);
+      }
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
       if(dataLength > 0)
       {
-        message.Write(buffer, 0, (dataLength < defaultMaxMsgSize) ? dataLength : defaultMaxMsgSize);
+        message.Write(buffer, 0, (dataLength < maxMsgSize) ? dataLength : maxMsgSize);
         message.Seek(0);
       }
     }
