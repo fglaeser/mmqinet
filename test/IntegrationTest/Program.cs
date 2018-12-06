@@ -48,8 +48,9 @@ namespace IntegrationTest
 
     static void ConnectWithAuthentication()
     {
+      // funciona
       Console.WriteLine("Connect to MQ With User & Password");
-      var mqmgr = MQQueueManager.Connect("QM.GLA.ITG.TEST.01", MQC.MQCO_NONE, "SYSTEM.DEF.SVRCONN", "10.20.7.45(1414)", "mq_ITG_test", "nwvq4368!");
+      var mqmgr = MQQueueManager.Connect("QM.GLA.ITG.TEST.01", MQC.MQCO_NONE, "ITG.SVRCONN", "10.20.7.45(1414)", "User_ITG_TEST", "nyrta1253");
       mqmgr.Disconnect();
     }
 

@@ -13,6 +13,8 @@ namespace Test.Mmqi
     public string QueueName => "QL.ITG.ALERTRAN.SUBSCRIBER.BOQ";
     public string TopicName => "R4/AltaModificacionDeEmpleados";
 
+    public string SubscriptionTopicName => "SUB/TOPIC/TEST";
+
     public string UnknownValue => "UKNOWN";
 
     [TestMethod, TestCategory("MQQueueManager")]
@@ -205,5 +207,61 @@ namespace Test.Mmqi
       }
     }
 
+    [TestMethod, TestCategory("MQSubscription")]
+    public void OpenSubscription_OK()
+    {
+
+      using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
+      {
+
+        var subs = new MQSubscription(broker);
+        subs.Subscribe(
+          "MY.SUBS.T1",
+          MQC.MQSO_CREATE + MQC.MQSO_RESUME + MQC.MQSO_NON_DURABLE + MQC.MQSO_MANAGED, 
+          TopicName);
+        Assert.AreEqual(true, subs.IsOpen);
+        subs.Close(MQC.MQCO_REMOVE_SUB, closeSubQueue: false, closeSubQueueOptions: MQC.MQCO_NONE);
+      }
+
+    }
+
+    [TestMethod, TestCategory("MQSubscription")]
+    public void SubscriptionGet_OK()
+    {
+      var message = "PublishInSubscription";
+      using (var broker = MQQueueManager.Connect(QueueManagerName, 0, Channel, ConnectionInfo))
+      {
+
+        var subs = new MQSubscription(broker);
+        subs.Subscribe(
+          "MY.SUBS.T1",
+          MQC.MQSO_CREATE + MQC.MQSO_RESUME + MQC.MQSO_NON_DURABLE + MQC.MQSO_MANAGED,
+          SubscriptionTopicName);
+
+
+        using (var topic = new MQTopic(broker, SubscriptionTopicName, string.Empty, MQC.MQTOPIC_OPEN_AS_PUBLICATION, MQC.MQOO_OUTPUT + MQC.MQOO_FAIL_IF_QUIESCING))
+        {
+          var outgoing = new MQMessage()
+          {
+            CharacterSet = MQC.CODESET_UTF,
+            Encoding = MQC.MQENC_NORMAL
+          };
+          outgoing.WriteString(message);
+          topic.Publish(outgoing, new MQPutMessageOptions());
+        }
+
+
+        var incoming = new MQMessage();
+        MQGetMessageOptions gmo = new MQGetMessageOptions();
+        gmo.WaitInterval = (int)TimeSpan.FromSeconds(30).TotalMilliseconds; //MQC.MQWI_UNLIMITED;
+        gmo.Options |= MQC.MQGMO_WAIT;
+        gmo.Options |= MQC.MQGMO_SYNCPOINT;
+
+        subs.Get(incoming, gmo);
+        Assert.AreEqual(message, incoming.ReadAll());
+
+        subs.Close(MQC.MQCO_REMOVE_SUB, closeSubQueue: true, closeSubQueueOptions: MQC.MQCO_NONE);
+      }
+    }
   }
 }

@@ -13,7 +13,7 @@ Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack a
 | MQDISC  | :heavy_check_mark:  | MQQueueManager |
 | MQOPEN  | :heavy_check_mark:  | MQQueue, MQTopic |
 | MQCLOSE  | :heavy_check_mark: | MQQueue, MQTopic |
-| MQSUB  | :x: | |
+| MQSUB  | :heavy_check_mark: | MQSubscription |
 | MQPUT  | :heavy_check_mark: | MQQueue, MQTopic |
 | MQPUT1  | :heavy_check_mark: | MQQueueManager |
 | MQGET  | :heavy_check_mark: | MQQueue |
@@ -118,6 +118,27 @@ using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channe
   qmgr.Publish("Some/Topic", outgoing);
 }
 ```
+### How to subscribe to topic
+```csharp
+
+using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channel, connectionInfo))
+{
+  var subs = new MQSubscription(qmgr);
+  subs.Subscribe(
+    "MY.SUBS.NAME",
+    MQC.MQSO_CREATE + MQC.MQSO_RESUME + MQC.MQSO_NON_DURABLE + MQC.MQSO_MANAGED,
+    "Some/Topic");
+  var incoming = new MQMessage();
+  MQGetMessageOptions gmo = new MQGetMessageOptions();
+  gmo.WaitInterval = (int)TimeSpan.FromSeconds(30).TotalMilliseconds; //MQC.MQWI_UNLIMITED;
+  gmo.Options |= MQC.MQGMO_WAIT;
+  gmo.Options |= MQC.MQGMO_SYNCPOINT;
+
+  subs.Get(incoming, gmo);
+  subs.Close(MQC.MQCO_REMOVE_SUB, closeSubQueue: true, closeSubQueueOptions: MQC.MQCO_NONE);
+}
+```
+
 ## Installation
 * As a prerequisite, you first need to install an IBM MQ client in the system where Mmqi.Net is about to be installed; it is a free library offered by IBM on top of which higher-level ones, such as Mmqi.Net, can connect to queue managers. IBM MQ clients can be downloaded from IBM's website.
 You can dowload the client from here ... [IBM MQ V8 Clients](https://www-01.ibm.com/support/docview.wss?uid=swg24037500)
