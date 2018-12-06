@@ -4,15 +4,16 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>Mmqi.Net</AssemblyName>
     <RootNamespace>Mmqi</RootNamespace>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <Authors>Facundo Glaeser</Authors>
     <Company />
     <RepositoryUrl>https://github.com/fglaeser/mmqinet.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>Minimalist .Net Core interface for IBM MQ (WebSphere MQ, MQSeries)</Description>
     <PackageTags>mqi;ibm;mq</PackageTags>
-    <PackageReleaseNotes>Handle MQRC_TRUNCATED_MSG_FAILED in MQQueue.Get
-Add missing seek(0) in ReadAll() extension method.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add subscriptions.</PackageReleaseNotes>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
