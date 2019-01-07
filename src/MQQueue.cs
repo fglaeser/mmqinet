@@ -50,11 +50,13 @@ namespace Mmqi
       var structMQGMO = gmo.StructMQGMO;
       var buffer = new byte[maxMsgSize];
       Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, maxMsgSize, buffer, out dataLength, out compCode, out reason);
-      while(compCode != MQC.MQCC_OK && reason == MQC.MQRC_TRUNCATED_MSG_FAILED)
+      message.md.StructMQMD = structMQMD;
+      while (compCode != MQC.MQCC_OK && reason == MQC.MQRC_TRUNCATED_MSG_FAILED)
       {
         maxMsgSize = dataLength;
         buffer = new byte[maxMsgSize];
         Bindings.MQGET(qMgr.Handle, objectHandle, ref structMQMD, ref structMQGMO, maxMsgSize, buffer, out dataLength, out compCode, out reason);
+        message.md.StructMQMD = structMQMD;
       }
       if (compCode != MQC.MQCC_OK) throw new MQException(compCode, reason);
       if(dataLength > 0)
