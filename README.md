@@ -138,7 +138,8 @@ using (var qmgr = MQQueueManager.Connect(queueManagerName, MQC.MQCO_NONE, channe
   subs.Close(MQC.MQCO_REMOVE_SUB, closeSubQueue: true, closeSubQueueOptions: MQC.MQCO_NONE);
 }
 ```
-
+## License
+Minimalist MQI.Net is licensed under the MIT license.
 ## Installation
 * As a prerequisite, you first need to install an IBM MQ client in the system where Mmqi.Net is about to be installed; it is a free library offered by IBM on top of which higher-level ones, such as Mmqi.Net, can connect to queue managers. IBM MQ clients can be downloaded from IBM's website.
 You can dowload the client from here ... [IBM MQ V8 Clients](https://www-01.ibm.com/support/docview.wss?uid=swg24037500)
