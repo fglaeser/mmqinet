@@ -1,3 +1,4 @@
+> ⚠️ **This project is no longer maintained.** Please use the [IBMMQDotnetClient](https://www.nuget.org/packages/IBMMQDotnetClient).
 # Minimalist MQI.Net
 Our own .Net Core interface for IBM MQ (WebSphere MQ, MQSeries) with Blackjack and Hookers.
 
